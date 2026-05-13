@@ -9,7 +9,7 @@ editor_options:
 ```{r}
 rm(list = ls())
 libraries <- c(
-  "tidyverse", "sf", "tmap", "lubridate", "patchwork"
+  "tidyverse"
 )
 
 #load and install packages
@@ -19,35 +19,46 @@ for(lib in libraries) {
     library(lib, character.only = TRUE)
   }
 }
+#load auxiliary functions
+source("~/Hubic/Analise_de_dados/KisangaQ/functions/climate_io.R")
 ```
 
 
 ```{r}
-#create a function to list all files in a directory
-list_climated_files <- function(folder_name) {
-  dir <- paste0("~/Dados/", folder_name)
-  list.files(dir, pattern = "\\.csv$", full.names = TRUE)
-}
-
-#create a function to read and combine all csv files in a directory
-read_climated_files <- function(folder_name) {
-  files <- list_climated_files(folder_name)
-  data_list <- lapply(files, read_csv)
-  combined_data <- bind_rows(data_list)
-  return(combined_data)
-}
-
-ndvi_data <- read_climated_files("NDVI")
-rain_data <- read_climated_files("RAINFALL")
-temperature_data <- read_climated_files("TEMPERATURE")
-
-write_csv(ndvi_data, "~/Dados/NDVI/compiled/2026_NDVI_combined.csv")
-write_csv(rain_data,"~/Dados/RAINFALL/compiled/2026_RAINFALL_combined.csv")
-write_csv(temperature_data, "~/Dados/TEMPERATURE/compiled/temperature_data.csv")
-
-#clean up the environment
-rm(list = ls())
+temp <- get_data("Temperature")
+rainfall <- get_data("Rainfall")
+ndvi <- get_data("NDVI")
+burn <- get_data("Burning")
 ```
+
+```{r}
+#generate a sample dataframe with 10 rows to be used in the app
+temp <- temp %>%
+  sample_n(10)
+
+rainfall <- rainfall %>%
+  sample_n(10)
+
+ndvi <- ndvi %>%
+  sample_n(10)
+
+burn <- burn %>%
+  sample_n(10)
+
+#export sample dataframes to csv
+write_csv(temp, "~/Hubic/Analise_de_dados/KisangaQ_web/data/samples/temp_sample.csv")
+write_csv(rainfall, "~/Hubic/Analise_de_dados/KisangaQ_web/data/samples/rainfall_sample.csv")
+write_csv(ndvi, "~/Hubic/Analise_de_dados/KisangaQ_web/data/samples/ndvi_sample.csv")
+write_csv(burn, "~/Hubic/Analise_de_dados/KisangaQ_web/data/samples/burn_sample.csv")
+```
+
+
+
+
+
+
+
+
 
 
 
