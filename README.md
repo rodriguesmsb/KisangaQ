@@ -50,6 +50,10 @@ KisangaQ/
 ├── README.md
 └── data_analysis/
     └── 2026_Generate_sample_df.Rmd
+└── etl/
+└── functions/
+└── get_data/
+
 ```
 
 O repositório [`kisangaQ_web`](https://github.com/rodriguesmsb/kisangaQ_web) consome arquivos de amostra e metadados gerados aqui.
