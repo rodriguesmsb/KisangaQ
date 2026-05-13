@@ -1,0 +1,58 @@
+---
+title: "Analysis"
+output: html_document
+date: "2026-03-21"
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r}
+rm(list = ls())
+libraries <- c(
+  "tidyverse", "lubridate", "read.dbc", "readr"
+)
+
+#load and install packages
+for(lib in libraries) {
+  if (!require(lib, character.only = TRUE)) {
+    install.packages(lib, dependencies = TRUE)
+    library(lib, character.only = TRUE)
+  }
+}
+
+#load helper function to read multiple files
+source("~/Hubic/Analise_de_dados/Kisanga/scripts/etl/DATASUS/datasus/read_files/datasus_io.R")
+```
+
+
+```{r}
+sinan_tube <- read_datasus_files("SINAN/TUBE", extension = "dbc")
+write_csv(sinan_tube, "~/Dados/SINAN/TUBE/compiled/2026_sinan_tube.csv")
+
+sinan_hanseniase <- read_datasus_files("SINAN/HANS", extension = "dbc")
+write_csv(sinan_hanseniase, "~/Dados/SINAN/HANS/compiled/2026_sinan_hanseniase.csv")
+
+sinan_animais_peconhentos <- read_datasus_files("SINAN/ANIM", extension = "zip")
+write_csv(sinan_animais_peconhentos, "~/Dados/SINAN/ANIM/compiled/2026_sinan_animais_peconhentos.csv")
+
+sinan_violencia <- read_datasus_files("SINAN/VIOL", extension = "dbc")
+write_csv(sinan_violencia, "~/Dados/SINAN/VIOL/compiled/2026_sinan_violencia.csv")
+
+
+#clean up environment
+rm(list = ls())
+```
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,56 @@
+---
+title: "Analysis"
+output: html_document
+date: "2026-03-26"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+rm(list = ls())
+libraries <- c(
+  "tidyverse", "sf", "tmap", "lubridate", "patchwork"
+)
+
+#load and install packages
+for(lib in libraries) {
+  if (!require(lib, character.only = TRUE)) {
+    install.packages(lib, dependencies = TRUE)
+    library(lib, character.only = TRUE)
+  }
+}
+```
+
+
+```{r}
+#create a function to list all files in a directory
+list_climated_files <- function(folder_name) {
+  dir <- paste0("~/Dados/", folder_name)
+  list.files(dir, pattern = "\\.csv$", full.names = TRUE)
+}
+
+#create a function to read and combine all csv files in a directory
+read_climated_files <- function(folder_name) {
+  files <- list_climated_files(folder_name)
+  data_list <- lapply(files, read_csv)
+  combined_data <- bind_rows(data_list)
+  return(combined_data)
+}
+
+ndvi_data <- read_climated_files("NDVI")
+rain_data <- read_climated_files("RAINFALL")
+temperature_data <- read_climated_files("TEMPERATURE")
+
+write_csv(ndvi_data, "~/Dados/NDVI/compiled/2026_NDVI_combined.csv")
+write_csv(rain_data,"~/Dados/RAINFALL/compiled/2026_RAINFALL_combined.csv")
+write_csv(temperature_data, "~/Dados/TEMPERATURE/compiled/temperature_data.csv")
+
+#clean up the environment
+rm(list = ls())
+```
+
+
+
+
+
+

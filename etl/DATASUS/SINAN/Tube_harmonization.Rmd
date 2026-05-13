@@ -1,0 +1,59 @@
+---
+title: "Analysis"
+output: html_document
+date: "2026-03-28"
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+```{r}
+rm(list = ls())
+libraries <- c(
+  "tidyverse", "lubridate", "read.dbc", "readr"
+)
+
+#load and install packages
+for(lib in libraries) {
+  if (!require(lib, character.only = TRUE)) {
+    install.packages(lib, dependencies = TRUE)
+    library(lib, character.only = TRUE)
+  }
+}
+
+#load helper function to read multiple files
+source("../datasus/harmonize_files/harmonize_not_indv.R")
+source("../datasus/harmonize_files/harmonize_tube.R")
+```
+
+
+```{r}
+#read tube data
+tube_data <- read_csv("~/Dados/SINAN/TUBE/compiled/2026_sinan_tube.csv")
+
+tube_data %>% 
+  select(nu_idade_n, cs_sexo, cs_raca, cs_gestant, cs_escol_n, id_mn_resi)
+
+
+#standardize demographics information
+tube_data <- harmonize_demographics(tube_data)
+
+#check transformed collumns
+tube_data %>% 
+  select(idade, nu_idade_n, sexo, raca_cor, gestante, escolaridade, municipio_residencia)
+
+
+
+
+#apply dictionary
+tube_data <- recode_sinan_tb(tube_data)
+write_csv(tube_data, "~/Dados/SINAN/TUBE/compiled/2026_sinan_tube_harmonized.csv")
+```
+
+
+
+
+
+
+

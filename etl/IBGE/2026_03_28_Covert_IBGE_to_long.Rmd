@@ -1,0 +1,79 @@
+---
+title: "Analysis"
+output: html_document
+date: "2026-03-26"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+rm(list = ls())
+libraries <- c(
+  "tidyverse", "lubridate"
+)
+
+#load and install packages
+for(lib in libraries) {
+  if (!require(lib, character.only = TRUE)) {
+    install.packages(lib, dependencies = TRUE)
+    library(lib, character.only = TRUE)
+  }
+}
+```
+
+
+```{r}
+#read files
+col_map <- read_csv("~/Dados/Quilombolas/col_maps.csv") %>%
+  #clean whitespaces
+  mutate(across(everything(), str_squish))
+
+population <- read_csv("~/Dados/Quilombolas/Habitantes_quilombolas_por_comunidade.csv") %>%
+  rename_with(str_squish)
+
+#get collumns to reshape
+# Columns to reshape
+cols_to_long <- intersect(col_map$col_name, names(population))
+
+#convert to long
+population_long <- population %>%
+  pivot_longer(
+    cols = all_of(cols_to_long),
+    names_to = "col_name",
+    values_to = "habitantes"
+  ) %>%
+  left_join(col_map, by = "col_name") %>%
+  mutate(
+    habitantes = na_if(as.character(habitantes), "X"),
+    habitantes = parse_number(habitantes),
+    sexo = case_when(
+      group == "M" ~ "Male",
+      group == "F" ~ "Female",
+      group == "total" ~ "Total",
+      TRUE ~ group
+    ),
+    faixa_etaria = label
+  ) %>%
+  select(
+    microregiao,
+    Comunidade,
+    sexo,
+    faixa_etaria,
+    habitantes,
+    col_name
+  )
+
+#replace NA in habitantes with 0
+population_long <- population_long %>%
+  mutate(habitantes = if_else(is.na(habitantes), 0, habitantes))
+
+
+#export to csv
+write_csv(population_long, "~/Dados/Quilombolas/compiled/2026_Pop_quilombolas_comunidade_quilombola.csv")
+
+rm(list=ls())
+```
+
+
+
+
