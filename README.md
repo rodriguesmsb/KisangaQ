@@ -52,128 +52,6 @@ KisangaQ/
     └── 2026_Generate_sample_df.Rmd
 ```
 
-O arquivo `data_analysis/2026_Generate_sample_df.Rmd` gera amostras de dados climáticos e ambientais para uso no aplicativo web.
-
-## Script disponível
-
-### `data_analysis/2026_Generate_sample_df.Rmd`
-
-Este documento RMarkdown:
-
-1. carrega o pacote `tidyverse`;
-2. importa funções auxiliares de `functions/climate_io.R`;
-3. lê bases de temperatura, pluviosidade, NDVI e queimadas com `get_data()`;
-4. seleciona uma amostra de 10 linhas de cada base;
-5. exporta arquivos CSV para o repositório `kisangaQ_web`, em `data/samples/`.
-
-Bases usadas no script:
-
-```r
-temp     <- get_data("Temperature")
-rainfall <- get_data("Rainfall")
-ndvi     <- get_data("NDVI")
-burn     <- get_data("Burning")
-```
-
-Arquivos exportados:
-
-```text
-temp_sample.csv
-rainfall_sample.csv
-ndvi_sample.csv
-burn_sample.csv
-```
-
-## Dependências
-
-O script atual usa:
-
-```r
-install.packages("tidyverse")
-```
-
-Também é necessário disponibilizar o arquivo auxiliar:
-
-```text
-functions/climate_io.R
-```
-
-Esse arquivo deve conter a função `get_data()`, responsável por localizar e carregar as bases climáticas e ambientais.
-
-## Como executar
-
-Clone o repositório:
-
-```bash
-git clone https://github.com/rodriguesmsb/KisangaQ.git
-cd KisangaQ
-```
-
-Abra o arquivo RMarkdown em RStudio ou execute via R:
-
-```r
-rmarkdown::render("data_analysis/2026_Generate_sample_df.Rmd")
-```
-
-Se o objetivo for apenas gerar as amostras para o aplicativo web, verifique antes se o caminho de saída existe. O script atual escreve os arquivos diretamente no repositório `kisangaQ_web`:
-
-```text
-~/Hubic/Analise_de_dados/KisangaQ_web/data/samples/
-```
-
-Caso o projeto esteja em outro computador, ajuste esses caminhos antes de executar.
-
-## Fluxo recomendado de trabalho
-
-```text
-1. Identificar bases relevantes
-2. Ingerir dados brutos ou harmonizados
-3. Padronizar nomes, códigos geográficos e unidades temporais
-4. Criar metadados e documentação das variáveis
-5. Gerar amostras públicas ou sintéticas
-6. Exportar produtos para o kisangaQ_web
-7. Validar produtos com equipe técnica e parceiros comunitários
-```
-
-## Organização sugerida para próximas versões
-
-À medida que o repositório crescer, uma estrutura mais explícita pode facilitar manutenção e reprodutibilidade:
-
-```text
-KisangaQ/
-├── README.md
-├── data_analysis/
-│   └── 2026_Generate_sample_df.Rmd
-├── functions/
-│   ├── climate_io.R
-│   ├── health_io.R
-│   ├── spatial_io.R
-│   └── metadata_io.R
-├── metadata/
-│   └── data_dictionary.csv
-├── scripts/
-│   ├── 01_ingest_data.R
-│   ├── 02_clean_data.R
-│   ├── 03_generate_indicators.R
-│   └── 04_export_web_samples.R
-└── outputs/
-    ├── samples/
-    ├── figures/
-    └── reports/
-```
-
-## Relação com o Índice de Vulnerabilidade Quilombola
-
-Um dos produtos analíticos esperados do KISANGA-Q é o desenvolvimento de um Índice de Vulnerabilidade Quilombola, organizado em três dimensões:
-
-- **exposição**, relacionada a riscos ambientais e climáticos;
-- **sensibilidade**, relacionada a condições socioeconômicas, demográficas e de saúde;
-- **capacidade adaptativa**, relacionada a regularização fundiária, acesso a políticas públicas, redes comunitárias e práticas tradicionais de manejo e cuidado.
-
-Este repositório pode servir como espaço para desenvolver, testar e documentar as rotinas de cálculo desses indicadores.
-
-## Relação com o aplicativo web
-
 O repositório [`kisangaQ_web`](https://github.com/rodriguesmsb/kisangaQ_web) consome arquivos de amostra e metadados gerados aqui.
 
 Fluxo prático:
@@ -197,17 +75,6 @@ O KISANGA-Q deve adotar uma política de gestão de dados que respeite:
 - soberania e governança coletiva dos dados;
 - distinção entre dados públicos, dados agregados, dados restritos e dados que não devem ser publicados.
 
-Dados sensíveis ou identificáveis não devem ser versionados diretamente no GitHub.
-
-## Boas práticas recomendadas
-
-- Evitar caminhos absolutos em scripts compartilhados.
-- Usar arquivos de configuração, por exemplo `.Renviron`, `config.yml` ou variáveis de ambiente.
-- Documentar a origem de cada base.
-- Versionar apenas scripts, metadados e amostras públicas ou sintéticas.
-- Manter dados brutos grandes fora do GitHub.
-- Criar dicionários de dados para cada produto derivado.
-- Registrar decisões de harmonização em arquivos legíveis por humanos.
 
 ## Status
 
@@ -215,7 +82,7 @@ Em desenvolvimento inicial.
 
 ## Licença
 
-Licença ainda não definida. Recomenda-se adicionar uma licença explícita antes da distribuição pública ampla do código, metadados ou produtos derivados.
+
 
 ## Contato
 
